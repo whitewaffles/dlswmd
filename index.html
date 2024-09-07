@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord 로그인 및 나이 인증하기</title>
+    <title>Discord 로그인 및 PASS 인증</title>
     <style>
         .hidden {
             display: none;
+        }
+        #pass-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        #qr-code {
+            width: 200px;
+            height: 200px;
+            background-color: #f0f0f0;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
     <script>
@@ -23,9 +42,35 @@
             document.getElementById('age-verification-section').classList.remove('hidden');
         }
 
-        function verifyAge() {
-            // 여기에 나이 인증 로직을 구현합니다.
-            alert('나이 인증이 완료되었습니다. 채널에 접근할 수 있습니다.');
+        function showPassModal() {
+            document.getElementById('pass-modal').classList.remove('hidden');
+            // 실제 구현에서는 여기서 PASS 인증 서비스에 요청을 보내 QR 코드를 생성해야 합니다.
+            simulatePassAuth();
+        }
+
+        function closePassModal() {
+            document.getElementById('pass-modal').classList.add('hidden');
+        }
+
+        function simulatePassAuth() {
+            let seconds = 60;
+            const timer = setInterval(() => {
+                seconds--;
+                document.getElementById('timer').textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    document.getElementById('qr-code').textContent = 'QR 코드 만료';
+                }
+            }, 1000);
+
+            // 실제 구현에서는 PASS 인증 서비스의 응답을 기다려야 합니다.
+            setTimeout(() => {
+                clearInterval(timer);
+                alert('PASS 인증이 완료되었습니다.');
+                closePassModal();
+                document.getElementById('age-verification-section').classList.add('hidden');
+                document.getElementById('content-section').classList.remove('hidden');
+            }, Math.random() * 30000 + 5000); // 5-35초 사이에 랜덤하게 인증 완료
         }
 
         function handleCallback() {
@@ -47,14 +92,27 @@
 </head>
 <body>
     <div id="login-section">
-        <h1>인증 전 로그인</h1>
+        <h1>인증 전 로그인해주세요.</h1>
         <p>로그인하려면 아래 버튼을 클릭하세요.</p>
         <button onclick="loginWithDiscord()">Discord로 로그인</button>
     </div>
 
     <div id="age-verification-section" class="hidden">
-        <h1>채널을 볼려면 pass로 나이인증을 해주세요</h1>
-        <button onclick="verifyAge()">인증하기</button>
+        <h1>채널을 볼려면 PASS로 나이인증을 해주세요</h1>
+        <button onclick="showPassModal()">PASS 인증하기</button>
+    </div>
+
+    <div id="content-section" class="hidden">
+        <h1>인증 완료</h1>
+        <p>이제 채널을 볼 수 있습니다.</p>
+    </div>
+
+    <div id="pass-modal" class="hidden">
+        <h2>PASS 인증</h2>
+        <p>아래 QR 코드를 PASS 앱으로 스캔하세요.</p>
+        <div id="qr-code">QR 코드 위치</div>
+        <p>남은 시간: <span id="timer">60</span>초</p>
+        <button onclick="closePassModal()">취소</button>
     </div>
 </body>
 </html>
