@@ -1,11 +1,22 @@
-<html>
-    <body>
-        <h1>인증 페이지</h1>
-        <p>인증하려면 아래 버튼을 클릭하세요.</p>
-        <form action="/verify" method="post">
-            <input type="hidden" name="user_id" value="${userId}">
-            <input type="hidden" name="token" value="${token}">
-            <button type="submit">인증</button>
-        </form>
-    </body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord 로그인</title>
+    <script>
+        function loginWithDiscord() {
+            const clientId = 'YOUR_CLIENT_ID'; // Discord 개발자 포털에서 가져온 클라이언트 ID
+            const redirectUri = encodeURIComponent('https://dlvmserverdlswmd.netlify.app/callback'); // 콜백 URL (Discord 개발자 포털에 등록해야 함)
+            const scope = 'identify%20guilds'; // 필요한 권한 범위
+
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>인증 전 로그인해주세요.</h1>
+    <p>로그인하려면 아래 버튼을 클릭하세요.</p>
+    <button onclick="loginWithDiscord()">Discord로 로그인</button>
+</body>
 </html>
