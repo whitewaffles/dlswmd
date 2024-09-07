@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord 로그인 및 나이 인증</title>
+    <title>Discord 로그인 및 나이 인증하기</title>
     <style>
         .hidden {
             display: none;
         }
     </style>
     <script>
-        function loginWithDiscord() {
-            const clientId = '952929327006220299'; // Discord 개발자 포털에서 가져온 클라이언트 ID
-            const redirectUri = encodeURIComponent('https://dlvmserverdlswmd.netlify.app/callback'); // 콜백 URL (Discord 개발자 포털에 등록해야 함)
-            const scope = 'identify%20guilds'; // 필요한 권한 범위
+        const clientId = '952929327006220299'; // Discord 개발자 포털에서 가져온 클라이언트 ID
+        const redirectUri = encodeURIComponent('https://dlvmserverdlswmd.netlify.app/callback'); // 콜백 URL
 
+        function loginWithDiscord() {
+            const scope = 'identify%20guilds'; // 필요한 권한 범위
             window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
         }
 
@@ -25,15 +25,22 @@
 
         function verifyAge() {
             // 여기에 나이 인증 로직을 구현합니다.
-            // 예를 들어, 서버에 요청을 보내거나 로컬에서 처리할 수 있습니다.
             alert('나이 인증이 완료되었습니다. 채널에 접근할 수 있습니다.');
         }
 
-        // URL 파라미터를 확인하여 로그인 성공 여부를 판단합니다.
-        window.onload = function() {
+        function handleCallback() {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('login') === 'success') {
+            const code = urlParams.get('code');
+            if (code) {
+                // 여기서 서버에 코드를 전송하여 액세스 토큰을 얻을 수 있습니다.
+                console.log('인증 코드:', code);
                 showAgeVerification();
+            }
+        }
+
+        window.onload = function() {
+            if (window.location.pathname === '/callback') {
+                handleCallback();
             }
         }
     </script>
