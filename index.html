@@ -1,0 +1,11 @@
+<html>
+    <body>
+        <h1>인증 페이지</h1>
+        <p>인증하려면 아래 버튼을 클릭하세요.</p>
+        <form action="/verify" method="post">
+            <input type="hidden" name="user_id" value="${userId}">
+            <input type="hidden" name="token" value="${token}">
+            <button type="submit">인증</button>
+        </form>
+    </body>
+</html>
